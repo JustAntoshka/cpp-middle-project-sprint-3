@@ -8,10 +8,17 @@ namespace bookdb {
 
 enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
 
-// Ваш код для constexpr преобразования строк в enum::Genre и наоборот здесь
-
 constexpr Genre GenreFromString(std::string_view s) {
-    // Ваш код здесь
+    if (s == "Fiction")
+        return Genre::Fiction;
+    if (s == "Mystery")
+        return Genre::Mystery;
+    if (s == "NonFiction")
+        return Genre::NonFiction;
+    if (s == "SciFi")
+        return Genre::SciFi;
+    if (s == "Biography")
+        return Genre::Biography;
     return Genre::Unknown;
 }
 
@@ -25,7 +32,14 @@ struct Book {
     double rating;
     int read_count;
 
-    // Ваш код для конструкторов здесь
+    constexpr Book(std::string_view _title, std::string_view _author, int _year, Genre _genre, double _rating,
+                   int _read_count)
+        : author(_author), title(_title), year(_year), genre(_genre), rating(_rating), read_count(_read_count) {}
+
+    constexpr Book(std::string_view _title, std::string_view _author, int _year, std::string_view _genre,
+                   double _rating, int _read_count)
+        : author(_author), title(_title), year(_year), genre(GenreFromString(_genre)), rating(_rating),
+          read_count(_read_count) {}
 };
 }  // namespace bookdb
 
@@ -57,6 +71,17 @@ struct formatter<bookdb::Genre, char> {
     }
 };
 
-// Ваш код для std::formatter<Book> здесь
+template <>
+struct formatter<bookdb::Book, char> {
+    template <typename FormatContext>
+    auto format(const bookdb::Book b, FormatContext &fc) const {
+        return format_to(fc.out(), "{}, \"{}\", {}, {}, Rating: {}, Read count: {}", b.author, b.title, b.year, b.genre,
+                         b.rating, b.read_count);
+    }
+
+    constexpr auto parse(format_parse_context &ctx) {
+        return ctx.begin();  // Просто игнорируем пользовательский формат
+    }
+};
 
 }  // namespace std
