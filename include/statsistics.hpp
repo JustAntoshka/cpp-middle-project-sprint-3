@@ -58,3 +58,36 @@ auto getTopNBy(BookDatabase<T> &cont, size_t n, Comparator comp) {
 }
 
 }  // namespace bookdb
+
+namespace std {
+template <>
+struct formatter<std::flat_map<std::string, size_t>> {
+    template <typename FormatContext>
+    auto format(const std::flat_map<std::string, size_t> &hist, FormatContext &fc) const {
+        for (const auto &[author, count] : hist) {
+            format_to(fc.out(), "{} - {}\n", author, count);
+        }
+        return fc.out();
+    }
+
+    constexpr auto parse(format_parse_context &ctx) {
+        return ctx.begin();  // Просто игнорируем пользовательский формат
+    }
+};
+
+template <>
+struct formatter<std::flat_map<bookdb::Genre, double>> {
+    template <typename FormatContext>
+    auto format(const std::flat_map<bookdb::Genre, double> &genre_2_rating, FormatContext &fc) const {
+        for (const auto &[genre, rating] : genre_2_rating) {
+            format_to(fc.out(), "{} - {}\n", genre, rating);
+        }
+        return fc.out();
+    }
+
+    constexpr auto parse(format_parse_context &ctx) {
+        return ctx.begin();  // Просто игнорируем пользовательский формат
+    }
+};
+
+}  // namespace std
