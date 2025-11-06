@@ -308,9 +308,26 @@ TEST(TestStatistics, CheckSampleRandomBooks) {
     {
         BookDatabase book_db{book1, book2, book3};
 
-        auto rnd_books = sampleRandomBooks(book_db, 1);
-        EXPECT_EQ(rnd_books.size(), 1);
-        CHECK_BOOK(rnd_books[0], book1);
+        {
+            auto rnd_books = sampleRandomBooks(book_db, 1);
+            EXPECT_EQ(rnd_books.size(), 1);
+            CHECK_BOOK(rnd_books[0], book1);
+        }
+
+        {
+            auto rnd_books = sampleRandomBooks(book_db, 2);
+            EXPECT_EQ(rnd_books.size(), 2);
+            CHECK_BOOK(rnd_books[0], book1);
+            CHECK_BOOK(rnd_books[1], book2);
+        }
+
+        {
+            auto rnd_books = sampleRandomBooks(book_db, 3);
+            EXPECT_EQ(rnd_books.size(), 3);
+            CHECK_BOOK(rnd_books[0], book1);
+            CHECK_BOOK(rnd_books[1], book2);
+            CHECK_BOOK(rnd_books[2], book3);
+        }
     }
 }
 

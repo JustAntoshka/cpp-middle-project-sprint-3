@@ -47,7 +47,7 @@ template <BookContainerLike T>
 auto sampleRandomBooks(const BookDatabase<T> &cont, size_t n) {
     std::vector<std::reference_wrapper<const Book>> result;
     result.reserve(n);
-    std::for_each_n(cont.begin(), n, [&result](const auto &book) { result.push_back(book); });
+    std::copy_n(cont.begin(), n, std::back_inserter(result));
     return result;
 }
 
