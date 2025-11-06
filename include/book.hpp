@@ -9,17 +9,19 @@ namespace bookdb {
 enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
 
 constexpr Genre GenreFromString(std::string_view s) {
-    if (s == "Fiction")
-        return Genre::Fiction;
-    if (s == "Mystery")
-        return Genre::Mystery;
-    if (s == "NonFiction")
-        return Genre::NonFiction;
-    if (s == "SciFi")
-        return Genre::SciFi;
-    if (s == "Biography")
-        return Genre::Biography;
-    return Genre::Unknown;
+    static constexpr auto GENRES = std::to_array<std::pair<std::string_view, Genre>>({
+        {"Fiction", Genre::Fiction},
+        {"NonFiction", Genre::NonFiction},
+        {"SciFi", Genre::SciFi},
+        {"Biography", Genre::Biography},
+        {"Mystery", Genre::Mystery}
+    });
+
+    auto result = std::find_if(GENRES.begin(), GENRES.end(), [s](auto&& genre_str_pair){
+        return genre_str_pair.first == s;
+    });
+
+    return result != GENRES.end() ? result->second : Genre::Unknown;
 }
 
 struct Book {
