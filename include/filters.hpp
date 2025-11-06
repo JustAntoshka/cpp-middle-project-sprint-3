@@ -43,7 +43,7 @@ namespace bookdb {
     template <BookIterator Iter, BookPredicate Predicate>
     auto filterBooks(Iter begin, Iter end, Predicate pred) {
         std::vector<std::reference_wrapper<const Book>> result;
-        std::for_each(begin, end, [&result, pred](const auto& book){if(pred(book)) result.push_back(book);});
+        std::copy_if(begin, end, std::back_inserter(result), pred);
         return result;
     }
 

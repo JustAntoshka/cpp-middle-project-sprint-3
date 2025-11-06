@@ -326,3 +326,20 @@ TEST(TestStatistics, CheckGetTopNBy) {
         CHECK_BOOK(top_books[0], {"Book B 1", "Author B", 44, Genre::Mystery, 15.0, 120});
     }
 }
+
+TEST(TestFilterBooks, CheckFilter) {
+    {
+        BookDatabase book_db{};
+        book_db.EmplaceBack("Book A 1", "Author A", 42, Genre::Mystery, 25.0, 100);
+        book_db.EmplaceBack("Book A 2", "Author A", 43, Genre::Mystery, 20.0, 110);
+        book_db.EmplaceBack("Book B 1", "Author B", 44, Genre::Mystery, 15.0, 120);
+        
+        auto filtered_books = filterBooks(book_db.begin(), book_db.end(), [](auto&& book){
+            return book.author == "Author A";
+        });
+
+        EXPECT_EQ(filtered_books.size(), 2);
+        CHECK_BOOK(filtered_books.at(0), {"Book A 1", "Author A", 42, Genre::Mystery, 25.0, 100});
+        CHECK_BOOK(filtered_books.at(1), {"Book A 2", "Author A", 43, Genre::Mystery, 20.0, 110});
+    }
+}
