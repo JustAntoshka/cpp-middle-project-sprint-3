@@ -43,6 +43,7 @@ namespace bookdb {
     template <BookIterator Iter, BookPredicate Predicate>
     auto filterBooks(Iter begin, Iter end, Predicate pred) {
         std::vector<std::reference_wrapper<const Book>> result;
+        result.reserve(std::distance(begin, end));
         std::copy_if(begin, end, std::back_inserter(result), pred);
         return result;
     }
