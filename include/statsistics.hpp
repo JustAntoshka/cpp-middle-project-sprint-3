@@ -5,8 +5,11 @@
 #include <random>
 #include <stdexcept>
 #include <string_view>
+#include <flat_map>
+#include <ranges>
 
 #include "book_database.hpp"
+#include "comparators.hpp"
 
 #include <print>
 

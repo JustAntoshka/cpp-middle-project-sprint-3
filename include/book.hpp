@@ -3,6 +3,7 @@
 #include <format>
 #include <stdexcept>
 #include <string_view>
+#include <array>
 
 namespace bookdb {
 
