@@ -15,7 +15,7 @@ namespace bookdb {
 template <BookContainerLike T, BookComparator Comparator = TransparentStringLess>
 auto buildAuthorHistogramFlat(const BookDatabase<T> &cont, Comparator comp = {}) {
     std::flat_map<std::string, size_t> result;
-    std::for_each(cont.begin(), cont.end(), [&result](auto &book) { result[std::string(book.author)]++; });
+    std::ranges::for_each(cont, [&result](auto&& book) { ++result[std::string(book.author)]; });
     return result;
 }
 
@@ -28,7 +28,7 @@ auto calculateGenreRatings(Iter begin, Iter end) {
         n++;
     });
     std::flat_map<Genre, double> result;
-    std::for_each(genre_2_rating_sum_map.begin(), genre_2_rating_sum_map.end(), [&result](auto &&genre_2_rating_sum) {
+    std::ranges::for_each(genre_2_rating_sum_map, [&result](auto &&genre_2_rating_sum) {
         auto genre = genre_2_rating_sum.first;
         const auto &rating_sum = genre_2_rating_sum.second;
         result[genre] = rating_sum.first / rating_sum.second;
